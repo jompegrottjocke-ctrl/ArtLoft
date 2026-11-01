@@ -2,8 +2,10 @@ import {shuffle,optionsFor} from './quiz.mjs';
 import {fetchCollectionPage} from './collection.mjs';
 const $=id=>document.getElementById(id);
 let pool=[],round=[],index=0,score=0,answered=false,requestId=0;
-const cacheKey='artloft-collection-v1';
+const cacheKey='artloft-cleveland-v1';
 async function collection(){
+ const bundled=await fetch(new URL('./collection-data.json',import.meta.url)).then(r=>r.json());
+ if(bundled.length>=5) return bundled;
  let cached=[];try{cached=JSON.parse(localStorage.getItem(cacheKey)||'[]');}catch{}
  if(cached.length>=100) return cached;
  const works=[];

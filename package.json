@@ -1,6 +1,6 @@
 {
   "name": "artloft",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ett konstquiz f\u00f6r Windows 11",
   "main": "src/main.cjs",
   "author": "ArtLoft",
@@ -10,7 +10,8 @@
     "dev": "electron .",
     "test": "node --test --test-isolation=none test/quiz.test.mjs",
     "dist:win": "electron-builder --win nsis --x64",
-    "test:live": "node scripts/check-museum.mjs"
+    "test:live": "node scripts/check-museum.mjs",
+    "prepare:collection": "node scripts/prepare-collection.mjs"
   },
   "devDependencies": {
     "electron": "^40.0.0",

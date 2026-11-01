@@ -22,9 +22,11 @@ Installationsfilen skapas i `dist`. Bygget är inte kodsignerat; Windows kan vis
 
 ## Konstsamlingen
 
-Appen hämtar upp till 1 000 målningar från Art Institute of Chicagos öppna API och filtrerar på public domain, tillgänglig bild och konstnär. Det faktiska antalet visas i appen. Metadata cachelagras lokalt efter första hämtningen. Bilder hämtas via museets IIIF-server och kräver internet även senare. Titlar visas enligt museets katalog. Konstnär, årtal och credit line visas efter varje svar. Mona Lisa ingår inte i detta museums samling; appen utlovar inte det verket.
+Windows-bygget hämtar upp till 300 målningar ur Cleveland Museum of Arts CC0-samling. Varje bild kontrolleras före paketering. Minst 100 olika titlar krävs, annars stoppas bygget. Bilder och metadata följer med installationen så att spelet fungerar offline. Titlar, konstnärer, årtal och credits kommer från museets katalog. Samlingen är ett urval och innehåller inte Mona Lisa.
 
-Nätverk: `api.artic.edu` och `www.artic.edu` över HTTPS. Inga konton eller API-nycklar behövs. API-dokumentation: https://api.artic.edu/docs/
+För utveckling: kör `npm run prepare:collection` före `npm start` för samma offlinefunktion. Utan den genererade samlingen försöker utvecklingsversionen hämta från API:t. Genererade bilder i `src/artworks` ska inte checkas in. Bygget genererar `src/collection-data.json` automatiskt.
+
+Nätverk vid förberedelse: `openaccess-api.clevelandart.org` och `openaccess-cdn.clevelandart.org` över HTTPS. Inga konton eller API-nycklar behövs. Källa och villkor: https://github.com/ClevelandMuseumArt/openaccess
 
 ## Validering
 
