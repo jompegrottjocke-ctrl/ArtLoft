@@ -1,0 +1,34 @@
+{
+  "name": "artloft",
+  "version": "1.0.0",
+  "description": "Ett konstquiz f\u00f6r Windows 11",
+  "main": "src/main.cjs",
+  "author": "ArtLoft",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "test": "node --test --test-isolation=none test/quiz.test.mjs",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "electron": "^40.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "se.artloft.quiz",
+    "productName": "ArtLoft",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}
