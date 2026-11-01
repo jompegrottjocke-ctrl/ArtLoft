@@ -16,6 +16,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - name: Verify museum API and artwork image
+        run: npm run test:live
       - run: npm run dist:win -- --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'

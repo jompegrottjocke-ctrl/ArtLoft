@@ -1,4 +1,5 @@
-import {shuffle,optionsFor,normalize} from './quiz.mjs';
+import {shuffle,optionsFor} from './quiz.mjs';
+import {fetchCollectionPage} from './collection.mjs';
 const $=id=>document.getElementById(id);
 let pool=[],round=[],index=0,score=0,answered=false,requestId=0;
 const cacheKey='artloft-collection-v1';
@@ -7,11 +8,10 @@ async function collection(){
  if(cached.length>=100) return cached;
  const works=[];
  for(let page=1;page<=10;page++){
-  const query=new URLSearchParams({limit:'100',page:String(page),fields:'id,title,artist_title,date_display,image_id,is_public_domain,credit_line','query[term][is_public_domain]':'true','query[term][artwork_type_id]':'1'});
-  const response=await fetch(`https://api.artic.edu/api/v1/artworks/search?${query}`,{signal:AbortSignal.timeout(25000)});
-  if(!response.ok) throw new Error(`Museet svarade med HTTP ${response.status}.`);
-  const json=await response.json();works.push(...normalize(json.data));
+  const {works:batch,totalPages}=await fetchCollectionPage(page);
+  works.push(...batch);
   $('loading').textContent=`Vi hänger upp samlingen… ${works.length} konstverk`;
+  if(page>=totalPages) break;
  }
  const unique=[...new Map(works.map(w=>[w.id,w])).values()];
  if(unique.length<5) throw new Error('Museet gav för få konstverk.');
@@ -42,5 +42,5 @@ function start(){round=shuffle(pool).slice(0,20);index=0;score=0;$('question').i
 $('next').onclick=()=>{if(!answered)return;if(index<round.length-1){index++;show();}else{++requestId;$('bar').style.width='100%';$('progress').textContent='RUNDA AVSLUTAD';$('question').textContent=`${score} av ${round.length} rätt`;$('hint').textContent='Varje möte med konsten lär oss något nytt. Välkommen tillbaka till galleriet.';$('answers').replaceChildren();$('feedback').textContent='';$('next').hidden=true;$('retry').hidden=false;$('retry').textContent='Spela en ny runda';}};
 $('retry').onclick=()=>{if(pool.length){if(index===round.length-1&&answered)start();else show();}else init();};
 $('soundless').onclick=()=>{if(pool.length)start();};
-async function init(){ $('retry').hidden=true;try{pool=await collection();start();}catch(error){$('loading').textContent=`Samlingen kunde inte hämtas. ArtLoft behöver internet vid första starten. ${error.message}`;$('retry').hidden=false;}}
+async function init(){ $('retry').hidden=true;try{pool=await collection();start();}catch(error){$('loading').textContent=`Samlingen kunde inte hämtas. ${error.message} Försök igen om en stund. Internet behövs för att hämta konstverken.`;$('retry').hidden=false;}}
 init();
